@@ -1,0 +1,18 @@
+# Binary firmware files and archives
+*.zip
+*.tar
+*.tar.md5
+*.lz4
+*.img
+*.pit
+ACR-*/
+odin4*
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Temporary / OS files
+.DS_Store
+*.tmp
