@@ -26,3 +26,4 @@ kernel_build
 a06-integrity-shield/
 boot_logo_custom_*/
 tools/a06_shield/obj/
+mkm-a06/
