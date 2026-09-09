@@ -13,6 +13,13 @@ fi
 echo "[*] Applying low-risk optimizations for Galaxy A06..."
 
 # 1. CPU Schedutil Touch Responsiveness
+# Global Schedutil directory (MediaTek MT6769 EAS layout)
+if [ -f "/sys/devices/system/cpu/cpufreq/schedutil/up_rate_limit_us" ]; then
+    echo 500 > /sys/devices/system/cpu/cpufreq/schedutil/up_rate_limit_us
+    echo 20000 > /sys/devices/system/cpu/cpufreq/schedutil/down_rate_limit_us
+    echo "[+] Tuned global Schedutil ramp-up to 500us"
+fi
+
 # Performance cluster (2x Cortex-A75) - lower ramp-up delay to 500us
 if [ -d "/sys/devices/system/cpu/cpufreq/policy6/schedutil" ]; then
     echo 500 > /sys/devices/system/cpu/cpufreq/policy6/schedutil/up_rate_limit_us
@@ -27,11 +34,11 @@ if [ -d "/sys/devices/system/cpu/cpufreq/policy0/schedutil" ]; then
     echo "[+] Tuned policy0 (Cortex-A55) Schedutil ramp-up to 1000us"
 fi
 
-# 2. Virtual Memory & In-RAM zRAM Tuning
-echo 100 > /proc/sys/vm/swappiness
+# 2. Balanced Virtual Memory & In-RAM zRAM Tuning (Prevents DSP & kswapd starvation in 3D gaming)
+echo 70 > /proc/sys/vm/swappiness
 echo 0 > /proc/sys/vm/page-cluster
 echo 100 > /proc/sys/vm/vfs_cache_pressure
-echo "[+] Tuned Virtual Memory (Swappiness: 100, page-cluster: 0)"
+echo "[+] Tuned Virtual Memory (Swappiness: 70, page-cluster: 0)"
 
 # 3. Storage I/O Read-Ahead Buffer (eMMC 5.1 speedup)
 for queue in /sys/block/mmcblk0*/queue/read_ahead_kb; do
