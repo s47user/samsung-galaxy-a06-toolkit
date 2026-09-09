@@ -16,3 +16,7 @@ __pycache__/
 # Temporary / OS files
 .DS_Store
 *.tmp
+Image
+Image.gz
+kernel_build/
+kernel_build
