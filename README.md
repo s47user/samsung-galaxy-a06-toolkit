@@ -58,8 +58,26 @@ sudo heimdall flash --pit a06.pit --boot apatch_patched_*.img --vbmeta vbmeta_di
 ```
 
 > **IMPORTANT**: A factory reset via **Stock Recovery** (`Wipe data / factory reset`) is mandatory immediately following the first flash due to Android 14 File-Based Encryption (FBE) key invalidation.
+> Subsequent flashes of boot/kernel packages will **NOT** wipe your data.
 
 ---
+
+## Custom Kernel Flashing (`AP_custom_kernel_AYE2.tar`)
+
+The custom kernel (Linux `4.19.191`) integrates:
+- **Samsung DEFEX completely stripped** (no unauthorized process kills).
+- **CONFIG_KPROBES enabled** (full support for dynamic APatch KernelPatch Modules / KPM).
+- **LZ4 & ZSTD compression** compiled in for high-speed in-RAM zRAM.
+- **Google BBR TCP congestion control** enabled.
+- **In-kernel WireGuard** enabled.
+
+### Flash via Odin (Windows / Linux)
+```bash
+# In Linux via odin4:
+sudo ./odin4 -a AP_custom_kernel_AYE2.tar
+
+# Or in Windows: place AP_custom_kernel_AYE2.tar into AP slot in Odin v3.14.4
+```
 
 ## Performance & Optimization Notes
 - **Eliminate eMMC Stutter**: Disable Samsung **RAM Plus** immediately (`Settings -> Device Care -> Memory -> RAM Plus -> OFF`).
