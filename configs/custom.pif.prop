@@ -1,0 +1,32 @@
+# SM-A065F Stock Fingerprint (Build AYE2)
+# Generated: 2026-09-09 for Samsung Galaxy A06 (SM-A065F)
+# Uses device's own CTS-certified stock fingerprint
+
+# Build Fields
+MANUFACTURER=samsung
+MODEL=SM-A065F
+FINGERPRINT=samsung/a06nsxx/a06:14/UP1A.231005.007/A065FXXS4AYE2:user/release-keys
+BRAND=samsung
+PRODUCT=a06nsxx
+DEVICE=a06
+RELEASE=14
+ID=UP1A.231005.007
+INCREMENTAL=A065FXXS4AYE2
+TYPE=user
+TAGS=release-keys
+SECURITY_PATCH=2025-04-01
+DEVICE_INITIAL_SDK_INT=34
+
+# System Properties
+*.build.id=UP1A.231005.007
+*.security_patch=2025-04-01
+*api_level=34
+
+# Advanced Settings
+spoofBuild=1
+spoofProps=1
+spoofProvider=1
+spoofSignature=0
+spoofVendingFinger=0
+spoofVendingSdk=0
+verboseLogs=0

@@ -1,0 +1,6 @@
+id=a06_shield
+name=A06 Integrity Shield
+version=1.0.0
+versionCode=100
+author=Antigravity
+description=Specialized native Zygisk shield for Samsung Galaxy A06 (SM-A065F). Surgically masks unlocked bootloader flags and Knox trip signals while preserving 100% authentic One UI firmware.

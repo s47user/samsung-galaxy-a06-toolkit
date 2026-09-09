@@ -4,9 +4,12 @@
 *.tar.md5
 *.lz4
 *.img
+*.bin
 *.pit
+*.apk
 ACR-*/
 odin4*
+SmartPack-Kernel-Manager
 
 # Python cache
 __pycache__/
@@ -20,3 +23,6 @@ Image
 Image.gz
 kernel_build/
 kernel_build
+a06-integrity-shield/
+boot_logo_custom_*/
+tools/a06_shield/obj/
