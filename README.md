@@ -78,21 +78,33 @@ python3 tools/vbmeta_tool.py pack --boot apatch_patched_*.img --vbmeta vbmeta_di
 
 ---
 
-### 3. Custom Kernel Flashing (`tools/repack_boot.py`)
-Custom Linux `4.19.191` kernel tailored for Helio G85:
-- **Samsung DEFEX completely removed** (no unauthorized process kills).
-- **CONFIG_KPROBES enabled** (full support for dynamic APatch KernelPatch Modules / KPM).
-- **LZ4 & ZSTD compression** for high-speed in-RAM zRAM swap.
-- **BBR TCP Congestion Control** enabled for low-latency networking.
+### 3. Custom Kernel Integration ([tools/repack_boot.py](tools/repack_boot.py))
+Custom Linux `4.19.191` kernel tailored for Helio G85 on Android 14 / One UI Core 6.1 (tested & verified live on hardware):
+- **Samsung DEFEX completely removed** (no unauthorized process kills, smooth context switching).
+- **LLVM LLD 17.0.2 & Compact RELR Packing** (uncompressed kernel memory footprint reduced from 36.0MB to 30.1MB, saving ~6.0MB RAM).
+- **Magisk & APatch Support** (works seamlessly under SELinux `Enforcing` with zero Knox anti-tamper interference).
+- **CONFIG_KPROBES enabled** (runtime symbol tracing for KernelSU, APatch KPM, and `simpleperf`).
+- **LZ4 & ZSTD compression** for high-speed in-RAM zRAM swap (eliminates eMMC 5.1 RAM Plus freeze).
+- **BBR TCP Congestion Control & FQ Pacing** enabled for low-latency Wi-Fi and LTE mobile networking.
+- **In-Kernel WireGuard VPN** for low-power, high-throughput encrypted tunneling.
+
+#### Quick Flash to Device (Already Rooted)
+```bash
+# Push & flash directly from terminal without Odin:
+adb push boot_custom.img /sdcard/
+adb shell su -c "dd if=/sdcard/boot_custom.img of=/dev/block/by-name/boot bs=4096"
+adb reboot
+```
+Or use the **Flasher** menu inside [SmartPack-Kernel-Manager-A06.apk](SmartPack-Kernel-Manager-A06.apk).
 
 ---
 
-### 4. Play Integrity & Knox Shield (`tools/a06_shield/`)
+### 4. Play Integrity & Knox Shield ([tools/a06_shield/](tools/a06_shield/))
 Custom Zygisk module designed to spoof device properties, bypass Knox flags, and pass Play Integrity (BASIC + DEVICE integrity).
 
 ---
 
-### 5. Performance & System Tweaks (`scripts/apply_safe_tweaks.sh`)
+### 5. Performance & System Tweaks ([scripts/apply_safe_tweaks.sh](scripts/apply_safe_tweaks.sh))
 - **RAM Plus**: Must be disabled (`Settings -> Device Care -> Memory -> RAM Plus -> OFF`) to eliminate eMMC wear and micro-stutters.
 - **zRAM**: 2GB zRAM configured using LZ4 compression at 70 swappiness.
 - **Schedutil**: Big-core rate limit tuned to 500µs for instantaneous touch responsiveness.
@@ -100,7 +112,15 @@ Custom Zygisk module designed to spoof device properties, bypass Knox flags, and
 ---
 
 ## References & Credits
-- **APatch / KernelPatch**: [bmax121/APatch](https://github.com/bmax121/APatch)
-- **Heimdall Suite**: [Benjamin Dobell / Glass Echidna](https://glassechidna.com.au/heimdall/)
-- **Odin4 for Linux**: Samsung Electronics Co., Ltd. / [Llucs/odin4](https://github.com/Llucs/odin4)
-- **Custom Kernel Research**: Developer **physwizz** (MediaTek Helio G85 kernel ecosystem)
+
+Special thanks and sincere credit to the developers, projects, and communities that made this toolkit and custom kernel possible:
+
+- **Samsung Open Source Release Center (OSRC)** for releasing stock device kernel source code (`SM-A065F_14_Opensource_A065FXXS4AYE2`).
+- **physwizz** for foundational MediaTek Helio G85 custom kernel research and optimization methodology.
+- **topjohnwu & The Magisk Team** for Magisk root and `magiskboot` ramdisk live-patching under `Enforcing` SELinux.
+- **bmax121 & The APatch Team** for APatch and KernelPatch dynamic symbol hooking.
+- **Jason A. Donenfeld & The WireGuard Project** for the in-kernel WireGuard VPN implementation.
+- **Google Linux / AOSP Team** for Clang toolchain support, BBR TCP congestion control, and Fair Queuing packet schedulers.
+- **Benjamin Dobell / Glass Echidna** for Heimdall Suite.
+- **Llucs / Samsung Electronics** for Odin4 Linux CLI utilities.
+- **Willi Ye (Grarak) & The SmartPack Team** for Kernel Adiutor and SmartPack Kernel Manager.
