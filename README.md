@@ -80,22 +80,36 @@ python3 tools/vbmeta_tool.py pack --boot apatch_patched_*.img --vbmeta vbmeta_di
 
 ### 3. Custom Kernel Integration ([tools/repack_boot.py](tools/repack_boot.py))
 Custom Linux `4.19.191` kernel tailored for Helio G85 on Android 14 / One UI Core 6.1 (tested & verified live on hardware):
-- **Samsung DEFEX completely removed** (no unauthorized process kills, smooth context switching).
-- **LLVM LLD 17.0.2 & Compact RELR Packing** (uncompressed kernel memory footprint reduced from 36.0MB to 30.1MB, saving ~6.0MB RAM).
-- **Magisk & APatch Support** (works seamlessly under SELinux `Enforcing` with zero Knox anti-tamper interference).
-- **CONFIG_KPROBES enabled** (runtime symbol tracing for KernelSU, APatch KPM, and `simpleperf`).
-- **LZ4 & ZSTD compression** for high-speed in-RAM zRAM swap (eliminates eMMC 5.1 RAM Plus freeze).
-- **BBR TCP Congestion Control & FQ Pacing** enabled for low-latency Wi-Fi and LTE mobile networking.
-- **In-Kernel WireGuard VPN** for low-power, high-throughput encrypted tunneling.
+- **Integrated KernelSU-Next (Manual Hooks)**: Direct in-kernel syscall interception (`fs/exec.c`, `fs/open.c`, `fs/stat.c`, `fs/read_write.c`, `drivers/input/input.c`, `kernel/reboot.c`). Completely invisible to userspace root detection.
+- **Anti-Detection Identity Spoofing**: Matches authentic Samsung factory builder (`dpi@21DKGB11`) and removes the `-dirty` git flag and commit hashes from `/proc/version`.
+- **Stripped Debug Symbols**: Strips DWARF debug information (`# CONFIG_DEBUG_INFO is not set`), reducing `vmlinux` size from 276 MB to 37 MB.
+- **Samsung DEFEX completely removed**: No unauthorized process kills, smooth context switching.
+- **LLVM LLD 17.0.2 & Compact RELR Packing**: Uncompressed kernel memory footprint reduced from 36.0MB to 30.1MB, saving ~6.0MB RAM.
+- **CONFIG_KPROBES enabled**: Runtime symbol tracing for dynamic APatch KPM and `simpleperf`.
+- **Default LZ4 & ZSTD compression**: Ultra-fast in-RAM zRAM swap (eliminates slow eMMC 5.1 RAM Plus freeze).
+- **BBR TCP Congestion Control & FQ Pacing**: Low-latency Wi-Fi and LTE mobile networking.
+- **In-Kernel WireGuard VPN**: Low-power, high-throughput encrypted tunneling.
 
-#### Quick Flash to Device (Already Rooted)
+#### Flashing to Device
+
+##### Method A: Heimdall (Direct Linux Flashing)
+Put the phone into Download Mode (`adb reboot download`) and execute in a clean single session:
 ```bash
-# Push & flash directly from terminal without Odin:
+heimdall flash --pit a06.pit --boot boot_custom.img
+```
+
+##### Method B: Direct Shell Flashing (Rooted)
+```bash
 adb push boot_custom.img /sdcard/
 adb shell su -c "dd if=/sdcard/boot_custom.img of=/dev/block/by-name/boot bs=4096"
 adb reboot
 ```
-Or use the **Flasher** menu inside [SmartPack-Kernel-Manager-A06.apk](SmartPack-Kernel-Manager-A06.apk).
+
+##### Method C: Odin / Odin4 (AP Slot)
+Flash the repacked tar package containing `boot.img` and `vbmeta.img`:
+```bash
+./odin4 -a AP_custom_kernel_AYE2.tar
+```
 
 ---
 
@@ -116,6 +130,8 @@ Custom Zygisk module designed to spoof device properties, bypass Knox flags, and
 Special thanks and sincere credit to the developers, projects, and communities that made this toolkit and custom kernel possible:
 
 - **Samsung Open Source Release Center (OSRC)** for releasing stock device kernel source code (`SM-A065F_14_Opensource_A065FXXS4AYE2`).
+- **tiann & The KernelSU Team** for KernelSU architecture and kernel-space su authorization.
+- **rifsxd & pershoot (KernelSU-Next Team)** for KernelSU-Next legacy architecture, non-GKI backports, and manual hooking implementations.
 - **physwizz** for foundational MediaTek Helio G85 custom kernel research and optimization methodology.
 - **topjohnwu & The Magisk Team** for Magisk root and `magiskboot` ramdisk live-patching under `Enforcing` SELinux.
 - **bmax121 & The APatch Team** for APatch and KernelPatch dynamic symbol hooking.
