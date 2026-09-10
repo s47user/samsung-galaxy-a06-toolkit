@@ -2,6 +2,11 @@
 
 Unified engineering toolkit, custom kernel research, boot logo customization, and rooting procedures for the **Samsung Galaxy A06 (`SM-A065F`)** running **Android 14 / One UI Core 6.1 (MediaTek Helio G85 MT6769V)**.
 
+[![Release](https://img.shields.io/github/v/release/s47user/android_kernel_samsung_a06?label=Kernel%20Release&color=blue)](https://github.com/s47user/android_kernel_samsung_a06/releases/latest)
+[![KernelSU-Next](https://img.shields.io/badge/KernelSU--Next-v3.3.0-success)](https://github.com/rifsxd/KernelSU-Next)
+[![Device](https://img.shields.io/badge/Device-SM--A065F%2FM-orange)](https://github.com/s47user/samsung-galaxy-a06-toolkit)
+[![License](https://img.shields.io/badge/License-GPL%202.0-yellow.svg)](https://opensource.org/licenses/GPL-2.0)
+
 ---
 
 ## Device Profile
@@ -89,6 +94,19 @@ Custom Linux `4.19.191` kernel tailored for Helio G85 on Android 14 / One UI Cor
 - **Default LZ4 & ZSTD compression**: Ultra-fast in-RAM zRAM swap (eliminates slow eMMC 5.1 RAM Plus freeze).
 - **BBR TCP Congestion Control & FQ Pacing**: Low-latency Wi-Fi and LTE mobile networking.
 - **In-Kernel WireGuard VPN**: Low-power, high-throughput encrypted tunneling.
+
+> [!TIP]
+> **Pre-compiled Binaries Ready for Download:**
+> Ready-to-flash boot images (`boot_custom.img`), Odin AP packages (`AP_custom_kernel_AYE2.tar`), raw `Image` / `Image.gz`, and the companion `KernelSU_Next_v3.3.0.apk` are published and verified on GitHub Releases:
+> 📦 **[Download Pre-Compiled Kernel & Boot Images (Latest Release)](https://github.com/s47user/android_kernel_samsung_a06/releases/latest)**
+>
+> | Asset | Size | Purpose |
+> | :--- | :--- | :--- |
+> | `boot_custom.img` | 64 MB | Repacked Android boot v2 image (clean ramdisk + SEANDROIDENFORCE footer). Ready for Heimdall or `dd`. |
+> | `AP_custom_kernel_AYE2.tar` | 65 MB | Odin-flashable archive containing `boot.img` and `vbmeta.img`. Flash via Odin **AP** slot. |
+> | `Image.gz` / `Image` | 12 MB / 30 MB | Gzip-compressed / raw AArch64 kernel binaries. |
+> | `KernelSU_Next_v3.3.0.apk` | 9.8 MB | Companion KernelSU Next Manager application. |
+> | `sha256sums.txt` | Text | SHA-256 integrity checksums. |
 
 #### Flashing to Device
 
