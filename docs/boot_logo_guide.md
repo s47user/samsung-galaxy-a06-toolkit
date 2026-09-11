@@ -18,22 +18,22 @@ This guide details how to customize the initial boot splash logo and completely 
 | `logo.jpg` | **720 × 1600** | Baseline RGB JPEG | Main boot logo (Samsung Galaxy / Powered by Android) |
 | `logo2.jpg` | **720 × 1600** | Baseline RGB JPEG | Secondary boot logo screen |
 | `letter.jpg` | **720 × 1600** | Baseline RGB JPEG | Fullscreen splash / letter screen |
-| `svb_orange.jpg` | **624 × 1200** | Baseline RGB JPEG | Knox Bootloader Unlocked orange warning banner |
-| `booting_warning.jpg` | **624 × 292** | Baseline RGB JPEG | "The phone is not running official software" prompt |
-| `warning_svb.jpg` | **720 × 1262** | Baseline RGB JPEG | SVB verification failure screen |
-| `warning.jpg` | **720 × 1260** | Baseline RGB JPEG | General integrity warning screen |
+| `svb_orange.jpg` | **624 × 1200** | Baseline RGB JPEG | Knox Bootloader Unlocked orange warning banner (Startup) |
+| `booting_warning.jpg` | **624 × 292** | Baseline RGB JPEG | "The phone is not running official software" prompt (Startup) |
+| `warning.jpg` | **720 × 1260** | Baseline RGB JPEG | Download Mode interactive menu (Volume Up: Continue, Vol Down: Cancel) |
+| `warning_svb.jpg` | **720 × 1262** | Baseline RGB JPEG | Download Mode SVB unlock menu (Vol Up long press: Unlock mode) |
 
 ---
 
-## Suppressing the Bootloader Unlocked Warning
+## Suppressing Bootloader Unlocked Warnings vs Download Mode Screens
 
-When unlocking the bootloader, Samsung Verified Boot (SVB) enters the "Orange State", displaying `svb_orange.jpg` and `booting_warning.jpg` for several seconds before boot.
+- **Normal Startup Warnings (`svb_orange.jpg`, `booting_warning.jpg`)**:
+  When the bootloader is unlocked, LittleKernel displays `svb_orange.jpg` and `booting_warning.jpg` for several seconds during normal device boot. These are safely replaced by custom splash branding (e.g. SIAW Freedom logo) or pure black (`#000000`) images to achieve a clean, silent boot.
+- **Download Mode Menus (`warning.jpg`, `warning_svb.jpg`)**:
+  These screens appear only when intentionally holding `Volume Up + Volume Down` with USB connected. They contain essential interactive button navigation prompts. Keeping them stock ensures you can read the button options clearly without an awkward black box appearing inside the cyan bootloader background.
 
 > [!TIP]
-> **Blackout Method vs Deletion**:
-> LittleKernel (`lk-verified.img`) parses and renders these images. While deleting them works on some legacy models, MediaTek LittleKernel may log errors or display fallback console text if assets are missing.
-> **The optimal method is to replace the warning images with pure black (`#000000`) JPEGs matching the exact dimensions.**
-> This causes the warning delay to run silently on a completely black screen, seamlessly transitioning into your custom logo.
+> `tools/logo_tool.py suppress-warning` suppresses startup boot warnings by default while keeping the interactive Download Mode menus intact. If you specifically wish to blackout Download Mode screens as well, pass `--include-download-mode`.
 
 ---
 

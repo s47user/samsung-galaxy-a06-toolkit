@@ -65,18 +65,23 @@ def unpack_up_param(up_param_bin, out_dir):
     files = sorted(os.listdir(out_dir))
     print(f"    Extracted {len(files)} files: {', '.join(files[:6])} ...")
 
-def suppress_warnings(images_dir, mode="blackout"):
+def suppress_warnings(images_dir, mode="blackout", include_download_mode=False):
     """
-    Suppresses the bootloader unlocked warnings.
+    Suppresses the bootloader unlocked warnings shown during normal phone boot.
     mode="blackout": Replaces warning images with pure black images of exact dimensions (safest, no LK null crashes).
     mode="delete": Deletes the warning files entirely from the archive.
+    include_download_mode: If True, also suppresses interactive Download Mode warning screens.
     """
+    # Bootloader unlocked warning images shown during regular system startup
     warning_files = {
         "svb_orange.jpg": (624, 1200),
         "booting_warning.jpg": (624, 292),
-        "warning.jpg": (720, 1260),
-        "warning_svb.jpg": (720, 1262),
     }
+
+    # Interactive warning screens displayed when triggering Download Mode via volume buttons
+    if include_download_mode:
+        warning_files["warning.jpg"] = (720, 1260)
+        warning_files["warning_svb.jpg"] = (720, 1262)
 
     for fname, size in warning_files.items():
         fpath = os.path.join(images_dir, fname)
@@ -139,6 +144,7 @@ if __name__ == "__main__":
     p_warn = subparsers.add_parser("suppress-warning", help="Black out or delete bootloader unlocked warning")
     p_warn.add_argument("dir", help="Directory of extracted up_param images")
     p_warn.add_argument("--mode", choices=["blackout", "delete"], default="blackout", help="blackout (recommended) or delete")
+    p_warn.add_argument("--include-download-mode", action="store_true", help="Also suppress interactive Download Mode screens (warning.jpg)")
 
     p_logo = subparsers.add_parser("set-logo", help="Set custom logo.jpg")
     p_logo.add_argument("dir", help="Directory of extracted up_param images")
@@ -156,7 +162,7 @@ if __name__ == "__main__":
             decompress_lz4_if_needed(args.src, tmp_bin)
         unpack_up_param(tmp_bin, args.out)
     elif args.command == "suppress-warning":
-        suppress_warnings(args.dir, args.mode)
+        suppress_warnings(args.dir, args.mode, args.include_download_mode)
     elif args.command == "set-logo":
         set_custom_logo(args.dir, args.image)
     elif args.command == "repack":
