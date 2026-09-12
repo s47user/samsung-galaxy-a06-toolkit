@@ -85,7 +85,9 @@ python3 tools/vbmeta_tool.py pack --boot apatch_patched_*.img --vbmeta vbmeta_di
 
 ### 3. Custom Kernel Integration ([tools/repack_boot.py](tools/repack_boot.py))
 Custom Linux `4.19.191` kernel tailored for Helio G85 on Android 14 / One UI Core 6.1 (tested & verified live on hardware):
+- **SuSFS v1.5.5 Kernel Subsystem**: Native stealth hiding layer (`sus_path`, `sus_mount`, `sus_kstat`, `try_umount`, `spoof_uname`, `open_redirect`, `hide_ksu_susfs_symbols`). Communicates via standard `prctl(KERNEL_SU_OPTION)` syscall interface.
 - **Integrated KernelSU-Next (Manual Hooks)**: Direct in-kernel syscall interception (`fs/exec.c`, `fs/open.c`, `fs/stat.c`, `fs/read_write.c`, `drivers/input/input.c`, `kernel/reboot.c`). Completely invisible to userspace root detection.
+- **Samsung KABI & MediaTek Task Turbo Protection**: Preserved `futex_exit_mutex` across `struct task_struct` reserve slots to ensure zero scheduler panics on Helio G85.
 - **Anti-Detection Identity Spoofing**: Matches authentic Samsung factory builder (`dpi@21DKGB11`) and removes the `-dirty` git flag and commit hashes from `/proc/version`.
 - **Stripped Debug Symbols**: Strips DWARF debug information (`# CONFIG_DEBUG_INFO is not set`), reducing `vmlinux` size from 276 MB to 37 MB.
 - **Samsung DEFEX completely removed**: No unauthorized process kills, smooth context switching.
@@ -97,30 +99,30 @@ Custom Linux `4.19.191` kernel tailored for Helio G85 on Android 14 / One UI Cor
 
 > [!TIP]
 > **Pre-compiled Binaries Ready for Download:**
-> Ready-to-flash boot images (`boot_custom.img`), Odin AP packages (`AP_custom_kernel_AYE2.tar`), raw `Image` / `Image.gz`, and the companion `KernelSU_Next_v3.3.0.apk` are published and verified on GitHub Releases:
+> Ready-to-flash boot images (`boot_custom.img`), Odin AP packages (`AP_custom_kernel_AYE2.tar`), raw `Image` / `Image.gz`, the companion `KernelSU_Next_v3.3.0.apk`, and the `ksu_module_susfs_v1.5.5.zip` are published and verified on GitHub Releases:
 > 📦 **[Download Pre-Compiled Kernel & Boot Images (Latest Release)](https://github.com/s47user/android_kernel_samsung_a06/releases/latest)**
 >
 > | Asset | Size | Purpose |
 > | :--- | :--- | :--- |
-> | `boot_custom.img` | 64 MB | Repacked Android boot v2 image (clean ramdisk + SEANDROIDENFORCE footer). Ready for Heimdall or `dd`. |
-> | `AP_custom_kernel_AYE2.tar` | 65 MB | Odin-flashable archive containing `boot.img` and `vbmeta.img`. Flash via Odin **AP** slot. |
-> | `Image.gz` / `Image` | 12 MB / 30 MB | Gzip-compressed / raw AArch64 kernel binaries. |
+> | `boot_custom.img` / `boot_custom_susfs.img` | 64 MB | Repacked Android boot v2 image (clean ramdisk + SEANDROIDENFORCE footer). Ready for Heimdall or `dd`. |
+> | `AP_custom_kernel_AYE2.tar` / `AP_custom_kernel_susfs_AYE2.tar` | 65 MB | Odin-flashable archive containing `boot.img` and `vbmeta.img`. Flash via Odin **AP** slot. |
+> | `ksu_module_susfs_v1.5.5.zip` | 185 KB | Companion SuSFS v1.5.5 module for KernelSU Next Manager. |
+> | `Image.gz` / `Image` | 12.5 MB / 30 MB | Gzip-compressed / raw AArch64 kernel binaries. |
 > | `KernelSU_Next_v3.3.0.apk` | 9.8 MB | Companion KernelSU Next Manager application. |
 > | `sha256sums.txt` | Text | SHA-256 integrity checksums. |
 
 #### Flashing to Device
 
-##### Method A: Heimdall (Direct Linux Flashing)
+##### Method A: Direct Shell Flashing (Rooted)
+```bash
+adb push boot_custom.img /data/local/tmp/
+adb shell "su -c 'dd if=/data/local/tmp/boot_custom.img of=/dev/block/by-name/boot bs=4096 && sync && reboot'"
+```
+
+##### Method B: Heimdall (Direct Linux Flashing)
 Put the phone into Download Mode (`adb reboot download`) and execute in a clean single session:
 ```bash
 heimdall flash --pit a06.pit --boot boot_custom.img
-```
-
-##### Method B: Direct Shell Flashing (Rooted)
-```bash
-adb push boot_custom.img /sdcard/
-adb shell su -c "dd if=/sdcard/boot_custom.img of=/dev/block/by-name/boot bs=4096"
-adb reboot
 ```
 
 ##### Method C: Odin / Odin4 (AP Slot)
