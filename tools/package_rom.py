@@ -19,10 +19,10 @@ STOCK_AP_DIR = "ACR-A065FXXS4AYE2-20250519143541/AP_A065FXXS4AYE2_A065FXXS4AYE2_
 WORK_DIR = "work_rom"
 PACKAGE_DIR = os.path.join(WORK_DIR, "package_staging")
 LZ4_BIN = "tools/bin_tools/usr/bin/lz4"
-OUT_TAR = "AP_A065F_Debloated_V1.3.tar"
-OUT_TAR_MD5 = "AP_A065F_Debloated_V1.3.tar.md5"
-OUT_SUPER_ONLY_TAR = "AP_A065F_Debloated_V1.3_SUPER_ONLY.tar"
-OUT_SUPER_ONLY_MD5 = "AP_A065F_Debloated_V1.3_SUPER_ONLY.tar.md5"
+OUT_TAR = "AP_A065F_Debloated_V1.4.tar"
+OUT_TAR_MD5 = "AP_A065F_Debloated_V1.4.tar.md5"
+OUT_SUPER_ONLY_TAR = "AP_A065F_Debloated_V1.4_SUPER_ONLY.tar"
+OUT_SUPER_ONLY_MD5 = "AP_A065F_Debloated_V1.4_SUPER_ONLY.tar.md5"
 
 COMPANION_BLOBS = [
     "dtbo.img.lz4",

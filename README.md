@@ -145,8 +145,14 @@ Custom Zygisk module designed to spoof device properties, bypass Knox flags, and
 
 ---
 
-### 6. Custom Stock-Based ROM v1.3 & One UI Experience Suite ([modules/a06_experience_suite/](modules/a06_experience_suite/))
-A production-grade, systemless KernelSU / Magisk module that unlocks premium Samsung One UI features natively on the **Samsung Galaxy A06 (`SM-A065F`)** running Android 14 / One UI Core 6.1 (`A065FXXS4AYE2`). Included as the core feature suite of our Custom Stock-Based ROM v1.3.
+### 6. Custom Stock-Based ROM v1.4 & Performance Engine ([modules/a06_experience_suite/](modules/a06_experience_suite/))
+A production-grade, debloated custom ROM and companion systemless suite for the **Samsung Galaxy A06 (`SM-A065F`)** running Android 14 / One UI Core 6.1 (`A065FXXS4AYE2`). In v1.4, the ROM integrates the **Core Silicon & I/O Optimization Engine (Sectors 1, 2, 3, and 4)** directly alongside the flagship One UI feature set.
+
+#### Core Optimization Sectors (v1.4):
+* **Sector 1 (eMMC 5.1 I/O)**: Enforces `mq-deadline` scheduler, 128KB read-ahead buffer, and CPU-core I/O completion pinning to eliminate micro-stutters during app launches.
+* **Sector 2 (Pure in-RAM zRAM)**: 2.2 GB compressed zRAM block (LZ4) with `swappiness = 100`, `vfs_cache_pressure = 70`, and micro-trickle dirty page flushes, completely freeing eMMC storage from swap wear.
+* **Sector 3 (Schedutil & Touch Curves)**: `up_rate_limit_us = 500` (0.5ms instant touch ramp-up) and `down_rate_limit_us = 20,000` (20ms hold) for smooth 60 FPS pacing, with SurfaceFlinger backpressure disabled.
+* **Sector 4 (Battery & Deep Sleep)**: 10-minute balanced Doze standby transition and cellular radio fast dormancy timers.
 
 #### Verified Working Feature Matrix:
 | Feature | Scope | Implementation Mechanism | Live Verification |
@@ -160,11 +166,10 @@ A production-grade, systemless KernelSU / Magisk module that unlocks premium Sam
 | **Separate App Sound** | AudioService (MultiSound) | Floating feature (`AUDIO_SUPPORT_SEPARATE_APP_SOUND`) | Independent audio routing per application. |
 | **High-End UI & Blur Effects** | Launcher & SurfaceFlinger | Floating feature (`LAUNCHER_CONFIG_ANIMATION_TYPE=HighEnd`) | Fluid animations and partial blur. |
 
-#### Installation:
-Flash `modules/a06_experience_suite.zip` directly via **KernelSU-Next Manager** or **Magisk** -> Modules -> Install from storage -> Reboot.
-
-* **Package**: [`modules/a06_experience_suite.zip`](modules/a06_experience_suite.zip)
-* **SHA-256**: `c7c3abcafe4f233320331c4285c582a1fdc478e09cd424f757bb6bf1560de060`
+#### Installation & Flashing:
+- **Odin SUPER_ONLY Package**: [`AP_A065F_Debloated_V1.4_SUPER_ONLY.tar.md5`](AP_A065F_Debloated_V1.4_SUPER_ONLY.tar.md5) (`e3c68ad8ba4cdd302f876fec291141a11b3fe358262e836c7172defe4eebcc9e`)
+- **Full Odin AP Package**: [`AP_A065F_Debloated_V1.4.tar.md5`](AP_A065F_Debloated_V1.4.tar.md5) (`1ef9976243c0e9daac00987ed745e030aca7bfedabf80d0f311f9e68e458bff7`)
+- **Standalone Module**: [`modules/a06_experience_suite.zip`](modules/a06_experience_suite.zip) (`259 KB`)
 
 ---
 
