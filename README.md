@@ -145,6 +145,29 @@ Custom Zygisk module designed to spoof device properties, bypass Knox flags, and
 
 ---
 
+### 6. Custom Stock-Based ROM v1.3 & One UI Experience Suite ([modules/a06_experience_suite/](modules/a06_experience_suite/))
+A production-grade, systemless KernelSU / Magisk module that unlocks premium Samsung One UI features natively on the **Samsung Galaxy A06 (`SM-A065F`)** running Android 14 / One UI Core 6.1 (`A065FXXS4AYE2`). Included as the core feature suite of our Custom Stock-Based ROM v1.3.
+
+#### Verified Working Feature Matrix:
+| Feature | Scope | Implementation Mechanism | Live Verification |
+| :--- | :--- | :--- | :--- |
+| **Real-Time Network Speed** | Status Bar & Settings | Injected CSC Feature (`CscFeature_Setting_SupportRealTimeNetworkSpeed`) + Global OMC flag | Live upload/download rate dynamically rendered in status bar. |
+| **Native 2-Way Call Recording** | InCallUI & Phone App | CSC Feature (`CscFeature_VoiceCall_ConfigRecording=RecordingAllowed`) | In-call recording button & auto-record menu active in Samsung Phone settings. |
+| **Camera Shutter Sound Toggle** | Samsung Camera | ODM project override (`ro.vendor.cam.name=M1`) | Dedicated "Shutter sound" ON/OFF switch in Camera Settings. |
+| **Full Samsung Screen Recorder** | SmartCapture & SystemUI | Floating feature flag + QS Tile + overlay permission | 1080p high quality recording, PIP selfie video slider, Quick Settings tile. |
+| **System-Wide Dolby Atmos** | SoundAlive & Audio HAL | Floating feature (`AUDIO_SUPPORT_DOLBY_AUDIO`, stereo SoundAlive profiles) | Dolby Atmos tile in Quick Settings and custom equalizer presets. |
+| **Smart Call & Spam Protection** | Samsung Contacts & Phone | Hiya anti-malware provider CSC flag (`CscFeature_VoiceCall_SupportCallProtect`) | Caller ID & spam call identification. |
+| **Separate App Sound** | AudioService (MultiSound) | Floating feature (`AUDIO_SUPPORT_SEPARATE_APP_SOUND`) | Independent audio routing per application. |
+| **High-End UI & Blur Effects** | Launcher & SurfaceFlinger | Floating feature (`LAUNCHER_CONFIG_ANIMATION_TYPE=HighEnd`) | Fluid animations and partial blur. |
+
+#### Installation:
+Flash `modules/a06_experience_suite.zip` directly via **KernelSU-Next Manager** or **Magisk** -> Modules -> Install from storage -> Reboot.
+
+* **Package**: [`modules/a06_experience_suite.zip`](modules/a06_experience_suite.zip)
+* **SHA-256**: `c7c3abcafe4f233320331c4285c582a1fdc478e09cd424f757bb6bf1560de060`
+
+---
+
 ## References & Credits
 
 Special thanks and sincere credit to the developers, projects, and communities that made this toolkit and custom kernel possible:

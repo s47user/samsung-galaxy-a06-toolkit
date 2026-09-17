@@ -1,5 +1,6 @@
 # Binary firmware files and archives
 *.zip
+!modules/*.zip
 *.tar
 *.tar.md5
 *.lz4
@@ -27,3 +28,9 @@ a06-integrity-shield/
 boot_logo_custom_*/
 tools/a06_shield/obj/
 mkm-a06/
+work_rom/
+tools/bin_tools/
+
+# Screenshots
+/*.png
+!/custom_logo_*.png
