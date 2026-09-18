@@ -12,7 +12,7 @@ This suite also serves as the flagship feature overlay for our **Samsung Galaxy 
 | :--- | :--- | :--- | :--- |
 | **Real-Time Network Speed** | Status Bar & Settings | Injected CSC Feature (`CscFeature_Setting_SupportRealTimeNetworkSpeed`) + Global OMC flag | Live upload/download rate dynamically rendered in status bar. |
 | **Native 2-Way Hardware Call Recording** | InCallUI & Phone App | CSC Feature (`CscFeature_VoiceCall_ConfigRecording=RecordingAllowed`) | In-call recording button & auto-record menu active in Samsung Phone settings. |
-| **Camera Shutter Sound Toggle** | Samsung Camera | ODM project override (`ro.vendor.cam.name=M1`) | Dedicated "Shutter sound" ON/OFF switch in Camera Settings. |
+| **Camera Shutter Sound Toggle** | Samsung Camera | CSC Feature (`CscFeature_Camera_ShutterSoundMenu=TRUE`) | Dedicated "Shutter sound" ON/OFF switch in Camera Settings without modifying ODM project. |
 | **Full Samsung Screen Recorder** | SmartCapture & SystemUI | Floating feature flag + QS Tile + overlay permission | 1080p high quality recording, PIP selfie video slider, Quick Settings tile. |
 | **System-Wide Dolby Atmos** | SoundAlive & Audio HAL | Floating feature (`AUDIO_SUPPORT_DOLBY_AUDIO`, stereo SoundAlive profiles) | Dolby Atmos tile in Quick Settings and custom equalizer presets. |
 | **Smart Call & Spam Protection** | Samsung Contacts & Phone | Hiya anti-malware provider CSC flag (`CscFeature_VoiceCall_SupportCallProtect`) | Caller ID & spam call identification. |
@@ -39,8 +39,8 @@ Samsung One UI Core stripped or region-locked these features across two distinct
 2. **Device Hardware Capabilities (`floating_feature.xml`)**:
    - Located at `/system/etc/floating_feature.xml`.
    - The module bind-mounts a customized XML enabling `SEC_FLOATING_FEATURE_FRAMEWORK_SUPPORT_SCREEN_RECORDER`, Dolby audio, and animation profiles.
-3. **Property Injection (`system.prop`)**:
-   - Injects `ro.vendor.cam.name=M1` to bypass Samsung Camera's country-code check for shutter sound menus.
+3. **Property Configuration (`system.prop`)**:
+   - Applies Mali GPU HWC passthrough, HWUI render-ahead pipeline, and SQLite WAL acceleration while strictly preserving stock `ro.vendor.cam.name=O8` for camera hardware compatibility.
 4. **Post-Boot Service (`service.sh`)**:
    - Auto-enables status bar network speed if unset.
    - Adds the Screen Recorder and Dolby tiles to Quick Settings.

@@ -13,10 +13,6 @@ if [ -f "$MODDIR/system/etc/floating_feature.xml" ]; then
     echo "Mounted floating_feature.xml successfully" >> "$LOGFILE"
 fi
 
-# Resetprop to unlock Camera Shutter Sound
-resetprop ro.vendor.cam.name M1
-
-
 # 2. Bind-mount CSC Features (OMC encrypted cscfeature.xml)
 CODER="$MODDIR/bin/sec-omc-coder"
 chmod 755 "$CODER"

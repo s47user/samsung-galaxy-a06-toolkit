@@ -170,7 +170,7 @@ A production-grade, debloated custom ROM and companion systemless suite for the 
 | :--- | :--- | :--- | :--- |
 | **Real-Time Network Speed** | Status Bar & Settings | Injected CSC Feature (`CscFeature_Setting_SupportRealTimeNetworkSpeed`) + Global OMC flag | Live upload/download rate dynamically rendered in status bar. |
 | **Native 2-Way Call Recording** | InCallUI & Phone App | CSC Feature (`CscFeature_VoiceCall_ConfigRecording=RecordingAllowed`) | In-call recording button & auto-record menu active in Samsung Phone settings. |
-| **Camera Shutter Sound Toggle** | Samsung Camera | ODM project override (`ro.vendor.cam.name=M1`) | Dedicated "Shutter sound" ON/OFF switch in Camera Settings. |
+| **Camera Shutter Sound Toggle** | Samsung Camera | CSC Feature (`CscFeature_Camera_ShutterSoundMenu=TRUE`) | Dedicated "Shutter sound" ON/OFF switch in Camera Settings. |
 | **Full Samsung Screen Recorder** | SmartCapture & SystemUI | Floating feature flag + QS Tile + overlay permission | 1080p high quality recording, PIP selfie video slider, Quick Settings tile. |
 | **System-Wide Dolby Atmos** | SoundAlive & Audio HAL | Floating feature (`AUDIO_SUPPORT_DOLBY_AUDIO`, stereo SoundAlive profiles) | Dolby Atmos tile in Quick Settings and custom equalizer presets. |
 | **Native Private DNS Ad-Block** | Network Resolver | Global setting (`dns.adguard.com`) | Blocks 95% of in-app ads and telemetry with zero VPN battery cost. |
@@ -182,7 +182,7 @@ A production-grade, debloated custom ROM and companion systemless suite for the 
 #### Installation & Flashing (v1.7):
 - **Odin SUPER_ONLY Package**: [`AP_A065F_Debloated_V1.7_SUPER_ONLY.tar.md5`](AP_A065F_Debloated_V1.7_SUPER_ONLY.tar.md5) (`b05676e1736befe2ef5b35020e1f43bd7423bd11bd366b4d2bda51d07c0adf80`)
 - **Full Odin AP Package**: [`AP_A065F_Debloated_V1.7.tar.md5`](AP_A065F_Debloated_V1.7.tar.md5) (`87b6a23e9370c66c9243fbb54ad77dc4316d55015781a81e6014036337805932`)
-- **Standalone Module**: [`modules/a06_experience_suite.zip`](modules/a06_experience_suite.zip) (`v3.3-Preservation`, `261 KB`, `21ff879b9245c516ac078ca6c411c879fd6f2cc45e14e8ed3816861adc41854e`)
+- **Standalone Module**: [`modules/a06_experience_suite.zip`](modules/a06_experience_suite.zip) (`v3.3-Preservation`, `261 KB`, `093372bfd546d28aab6b63f2a892a690d4ecc34d87284e8ec71f23af4421d5f0`)
 - **Diagnostic & Safety Scripts**: [`scripts/a06_hardware_health.sh`](scripts/a06_hardware_health.sh), [`scripts/a06_backup_efs.sh`](scripts/a06_backup_efs.sh), [`scripts/a06_restore_efs.sh`](scripts/a06_restore_efs.sh), and [`scripts/a06_art_optimizer.sh`](scripts/a06_art_optimizer.sh)
 
 ---
