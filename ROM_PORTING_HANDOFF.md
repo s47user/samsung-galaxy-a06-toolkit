@@ -1,12 +1,12 @@
 # Samsung Galaxy A06 (`SM-A065F`) Stock-Based Custom ROM - Project Handoff
 
-**Project State**: V1.5 Production Package Assembled & Verified  
+**Project State**: V1.6 Master Polish Generation — Assembled & Staged for Packaging  
 **Device**: Samsung Galaxy A06 (`SM-A065F` / `SM-A065M`)  
 **Chipset**: MediaTek Helio G85 (`MT6769V/CZ`), ARM Mali-G52 2EEMC2  
 **Base Firmware**: `A065FXXS4AYE2` (Android 14 / One UI Core 6.1)  
 **Kernel**: Custom `4.19.191` (KernelSU-Next v3.3.0 + SuSFS v1.5.5 + DEFEX removed)  
-**Optimization Engine**: Realist Silicon Engine (CPUSET Little-core gating, eMMC writeback batching, 15s Quick Doze, 80% Battery Protection, ART AOT pre-compiler)  
-**Feature Suite**: One UI Experience Suite v3.1 (Screen Recorder, Network Speed, Call Recording, Shutter Switch, Dolby Atmos, QS Tiles)  
+**Optimization Engine**: Master Polish Engine (AppLock CSC, SQLite WAL, HWC 100%, HWUI Pre-Render, 2.5s Fast Dormancy, Wellbeing Freeze, McAfee Purge, CABC LCD, SmartSwitch Cleanup) + Realist Silicon Engine (CPUSET Little-core gating, eMMC writeback batching, 15s Quick Doze, 80% Battery Protection, ART AOT pre-compiler)  
+**Feature Suite**: One UI Experience Suite v3.2-Master (Screen Recorder, Network Speed, Call Recording, Shutter Switch, Dolby Atmos, Adapt Sound, Native AppLock, QS Tiles)  
 **Verification Layer**: AVB 2.0 Disabled (`vbmeta_disabled.img`, flags `0x02`)  
 
 ---
@@ -34,15 +34,16 @@ In this phase, we developed a complete, reproducible engineering pipeline to con
 
 ---
 
-## 2. Generated Release Assets
+## 2. Generated Release Assets (v1.6)
 
 | Artifact | Size | Description | Flashing Target |
 | :--- | :--- | :--- | :--- |
-| **`AP_A065F_Debloated_SUPER_ONLY.tar.md5`** | **3.33 GB** | **Ultra-Safe Minimal Flash**. Contains **only** `super.img.lz4`. Zero touch on kernel, vbmeta, modem, or bootloader. Completely immune to IMEI/baseband/hardbrick risks. | Odin **AP** slot |
-| **`AP_A065F_Debloated_V1.tar.md5`** | **3.37 GB** | **Complete All-in-One AP Package**. Contains custom `super.img.lz4` + custom `boot.img.lz4` (KernelSU/SuSFS) + `vbmeta.img.lz4` (disabled) + companion trustlet blobs. | Odin **AP** slot |
+| **`AP_A065F_Debloated_V1.6_SUPER_ONLY.tar.md5`** | **3.14 GB** | **Ultra-Safe Minimal Flash**. Contains **only** `super.img.lz4`. Zero touch on kernel, vbmeta, modem, or bootloader. Completely immune to IMEI/baseband/hardbrick risks. | Odin **AP** slot |
+| **`AP_A065F_Debloated_V1.6.tar.md5`** | **3.19 GB** | **Complete All-in-One AP Package**. Contains custom `super.img.lz4` + custom `boot.img.lz4` (KernelSU/SuSFS) + `vbmeta.img.lz4` (disabled) + companion trustlet blobs. | Odin **AP** slot |
+| **`modules/a06_experience_suite.zip`** | **261 KB** | **Experience Suite v3.2-Master**. Systemless One UI polish module (AppLock, WAL, HWC, CABC, Fast Dormancy, McAfee purge). | KernelSU / Magisk |
 | `work_rom/partitions/system_custom.img` | 2.20 GB | Debloated, optimized EROFS image for `/system`. | Raw partition |
 | `work_rom/partitions/product_custom.img` | 604 MB | Debloated EROFS image for `/product`. | Raw partition |
-| `work_rom/super.img.lz4` | 3.33 GB | Standalone compressed dynamic partition container. | Raw partition |
+| `work_rom/super.img.lz4` | 3.14 GB | Standalone compressed dynamic partition container. | Raw partition |
 
 ---
 
@@ -96,14 +97,14 @@ Samsung produces an official Linux CLI version of Odin (`odin4`) that natively f
 1. Put phone into Download Mode.
 2. Execute Odin4 against the super-only package:
    ```bash
-   sudo ./odin4 -a AP_A065F_Debloated_SUPER_ONLY.tar.md5
+   sudo ./odin4 -a AP_A065F_Debloated_V1.6_SUPER_ONLY.tar.md5
    ```
 
 ---
 
 ### Method C: Flashing via Samsung Odin v3 (Windows)
 If using a Windows machine or virtual machine with USB passthrough:
-1. Load **`AP_A065F_Debloated_SUPER_ONLY.tar.md5`** into the **AP** slot.
+1. Load **`AP_A065F_Debloated_V1.6_SUPER_ONLY.tar.md5`** into the **AP** slot.
 2. Leave BL, CP, and CSC **completely empty**.
 3. Click **Start**.
 

@@ -57,17 +57,21 @@ for TARGET in $TARGETS; do
     fi
 
     # Check if already patched with all required features
-    if grep -q "CscFeature_VoiceCall_ConfigRecording" "$DECODED" && grep -q "CscFeature_Common_SupportZProjectFunctionInGlobal" "$DECODED" && grep -q "CscFeature_Camera_ShutterSoundMenu" "$DECODED"; then
+    if grep -q "CscFeature_VoiceCall_ConfigRecording" "$DECODED" && grep -q "CscFeature_Common_SupportZProjectFunctionInGlobal" "$DECODED" && grep -q "CscFeature_Camera_ShutterSoundMenu" "$DECODED" && grep -q "CscFeature_SmartManager_ConfigSubFeatures" "$DECODED"; then
         echo "Already contains full feature set: $TARGET" >> "$LOGFILE"
     else
         echo "Injecting full feature set into $TARGET" >> "$LOGFILE"
-        awk '/<\/FeatureSet>/{
+        awk '/\<\/FeatureSet\>/{
             print "    <CscFeature_Setting_SupportRealTimeNetworkSpeed>TRUE</CscFeature_Setting_SupportRealTimeNetworkSpeed>"
             print "    <CscFeature_SystemUI_SupportRealTimeNetworkSpeed>TRUE</CscFeature_SystemUI_SupportRealTimeNetworkSpeed>"
             print "    <CscFeature_Common_SupportZProjectFunctionInGlobal>TRUE</CscFeature_Common_SupportZProjectFunctionInGlobal>"
             print "    <CscFeature_VoiceCall_ConfigRecording>RecordingAllowed</CscFeature_VoiceCall_ConfigRecording>"
             print "    <CscFeature_Camera_ShutterSoundMenu>TRUE</CscFeature_Camera_ShutterSoundMenu>"
             print "    <CscFeature_VoiceCall_SupportCallProtect>TRUE</CscFeature_VoiceCall_SupportCallProtect>"
+            print "    <CscFeature_SmartManager_ConfigSubFeatures>AppLock</CscFeature_SmartManager_ConfigSubFeatures>"
+            print "    <CscFeature_Common_SupportAppLock>TRUE</CscFeature_Common_SupportAppLock>"
+            print "    <CscFeature_RIL_FastDormancyWaitTimer>2.5</CscFeature_RIL_FastDormancyWaitTimer>"
+            print "    <CscFeature_RIL_SupportFastDormancy>TRUE</CscFeature_RIL_SupportFastDormancy>"
         }1' "$DECODED" > "$PATCHED"
         mv -f "$PATCHED" "$DECODED"
     fi

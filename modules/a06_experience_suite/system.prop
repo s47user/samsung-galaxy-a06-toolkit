@@ -1,2 +1,14 @@
 # Unlock Samsung Camera Shutter Sound menu (Huaqin ODM project M1)
 ro.vendor.cam.name=M1
+
+# HWC 100% Pass-Through: bypass SurfaceFlinger software compositing
+debug.sf.enable_hwc_vds=1
+ro.surface_flinger.max_frame_buffer_acquired_buffers=3
+
+# HWUI Pre-Render Pipeline: reduce frame latency by pipelining 2 frames ahead
+debug.hwui.render_ahead=2
+debug.hwui.use_buffer_age=true
+
+# SQLite WAL Acceleration: eliminate synchronous fsync() micro-stutters
+debug.sqlite.wal=1
+persist.sys.sqlite.sync=NORMAL
