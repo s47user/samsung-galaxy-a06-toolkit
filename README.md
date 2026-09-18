@@ -145,14 +145,17 @@ Custom Zygisk module designed to spoof device properties, bypass Knox flags, and
 
 ---
 
-### 6. Custom Stock-Based ROM v1.4 & Performance Engine ([modules/a06_experience_suite/](modules/a06_experience_suite/))
-A production-grade, debloated custom ROM and companion systemless suite for the **Samsung Galaxy A06 (`SM-A065F`)** running Android 14 / One UI Core 6.1 (`A065FXXS4AYE2`). In v1.4, the ROM integrates the **Core Silicon & I/O Optimization Engine (Sectors 1, 2, 3, and 4)** directly alongside the flagship One UI feature set.
+### 6. Custom Stock-Based ROM v1.5 & Realist Silicon Engine ([modules/a06_experience_suite/](modules/a06_experience_suite/))
+A production-grade, debloated custom ROM and companion systemless suite for the **Samsung Galaxy A06 (`SM-A065F`)** running Android 14 / One UI Core 6.1 (`A065FXXS4AYE2`). In v1.5, the ROM integrates the **Realist Silicon & Battery Optimization Engine** directly alongside the flagship One UI feature set, eliminating community placebo myths in favor of verified physical hardware tunings.
 
-#### Core Optimization Sectors (v1.4):
-* **Sector 1 (eMMC 5.1 I/O)**: Enforces `mq-deadline` scheduler, 128KB read-ahead buffer, and CPU-core I/O completion pinning to eliminate micro-stutters during app launches.
-* **Sector 2 (Pure in-RAM zRAM)**: 2.2 GB compressed zRAM block (LZ4) with `swappiness = 100`, `vfs_cache_pressure = 70`, and micro-trickle dirty page flushes, completely freeing eMMC storage from swap wear.
-* **Sector 3 (Schedutil & Touch Curves)**: `up_rate_limit_us = 500` (0.5ms instant touch ramp-up) and `down_rate_limit_us = 20,000` (20ms hold) for smooth 60 FPS pacing, with SurfaceFlinger backpressure disabled.
-* **Sector 4 (Battery & Deep Sleep)**: 10-minute balanced Doze standby transition and cellular radio fast dormancy timers.
+#### Realist Optimization Architecture (v1.5):
+* **CPUSET Big-Core Gating**: Confines background daemons (`/dev/cpuset/background`, `system-background`, `restricted`) strictly to Cortex-A55 Little cores (0–3), ensuring the two Cortex-A75 Big cores remain completely dormant during screen-off and 100% responsive during UI interactions.
+* **Storage Writeback Batching**: Batches dirty VM pages every 15 seconds (`vm.dirty_writeback_centisecs = 1500`) instead of 5s, reducing eMMC 5.1 NAND controller wakeups and standby power consumption.
+* **eMMC 5.1 Bus Optimization**: Enforces `mq-deadline` scheduler, 128KB read-ahead buffer, and `rq_affinity = 2` to prevent UI frame drops on half-duplex flash memory during background writes.
+* **15-Second Quick Doze**: Injects accelerated light-idle parameters into `device_idle_constants`, entering deep sleep 15s after screen-off while retaining instant high-priority FCM notifications (WhatsApp, Telegram, Calls).
+* **Hardware Battery Protection**: Pre-configures native One UI battery protection mode (80% lifespan cap) to preserve lithium-ion cells from high-voltage degradation.
+* **ART AOT Pre-Compiler (`scripts/a06_art_optimizer.sh`)**: Direct tool to compile app bytecode to native ARM64 machine code via Google Play cloud profiles, eliminating JIT compilation stutter.
+* **UI Fluidity**: Scales window, transition, and animator durations to `0.75x` for responsive 60Hz/90Hz panel performance.
 
 #### Verified Working Feature Matrix:
 | Feature | Scope | Implementation Mechanism | Live Verification |
@@ -167,9 +170,10 @@ A production-grade, debloated custom ROM and companion systemless suite for the 
 | **High-End UI & Blur Effects** | Launcher & SurfaceFlinger | Floating feature (`LAUNCHER_CONFIG_ANIMATION_TYPE=HighEnd`) | Fluid animations and partial blur. |
 
 #### Installation & Flashing:
-- **Odin SUPER_ONLY Package**: [`AP_A065F_Debloated_V1.4_SUPER_ONLY.tar.md5`](AP_A065F_Debloated_V1.4_SUPER_ONLY.tar.md5) (`e3c68ad8ba4cdd302f876fec291141a11b3fe358262e836c7172defe4eebcc9e`)
-- **Full Odin AP Package**: [`AP_A065F_Debloated_V1.4.tar.md5`](AP_A065F_Debloated_V1.4.tar.md5) (`1ef9976243c0e9daac00987ed745e030aca7bfedabf80d0f311f9e68e458bff7`)
-- **Standalone Module**: [`modules/a06_experience_suite.zip`](modules/a06_experience_suite.zip) (`259 KB`)
+- **Odin SUPER_ONLY Package**: [`AP_A065F_Debloated_V1.5_SUPER_ONLY.tar.md5`](AP_A065F_Debloated_V1.5_SUPER_ONLY.tar.md5) (`74dea18667e525f8d0f4b9c6e5a4141b14614edb84dab4263a29d61f172f87cd`)
+- **Full Odin AP Package**: [`AP_A065F_Debloated_V1.5.tar.md5`](AP_A065F_Debloated_V1.5.tar.md5) (`1d31f5190b5ec19319345908f92b549047f9f81c36fac3e21f5963032e192e30`)
+- **Standalone Module**: [`modules/a06_experience_suite.zip`](modules/a06_experience_suite.zip) (`v3.1-Silicon`, `259 KB`, `045fedf56b362002fe6a0e11ad973bbcf6824d964be779516a627bd00397d937`)
+- **Diagnostic Scripts**: [`scripts/a06_battery_optimizer.sh`](scripts/a06_battery_optimizer.sh) and [`scripts/a06_art_optimizer.sh`](scripts/a06_art_optimizer.sh)
 
 ---
 

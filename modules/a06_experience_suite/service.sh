@@ -42,7 +42,7 @@ if [ -n "$TILES" ] && [ "$TILES" != "null" ]; then
     fi
 fi
 
-# 4. Sector 1: eMMC 5.1 Storage & I/O Optimization
+# 4. Sector 1: eMMC 5.1 Storage & I/O Optimization (Half-Duplex Bus Acceleration)
 for queue in /sys/block/mmcblk*/queue; do
     if [ -d "$queue" ]; then
         [ -f "$queue/scheduler" ] && echo "mq-deadline" > "$queue/scheduler" 2>/dev/null
@@ -53,22 +53,72 @@ for queue in /sys/block/mmcblk*/queue; do
     fi
 done
 
-# 5. Sector 2: Pure in-RAM zRAM VM Tuning
-echo "100" > /proc/sys/vm/swappiness 2>/dev/null
-echo "70" > /proc/sys/vm/vfs_cache_pressure 2>/dev/null
-echo "15" > /proc/sys/vm/dirty_ratio 2>/dev/null
-echo "5" > /proc/sys/vm/dirty_background_ratio 2>/dev/null
+# 5. Sector 2: Virtual Memory & Storage Writeback Batching (Reduces eMMC Flash Wakeups)
+echo "70" > /proc/sys/vm/swappiness 2>/dev/null
+echo "100" > /proc/sys/vm/vfs_cache_pressure 2>/dev/null
 echo "0" > /proc/sys/vm/page-cluster 2>/dev/null
+echo "1500" > /proc/sys/vm/dirty_writeback_centisecs 2>/dev/null
+echo "3000" > /proc/sys/vm/dirty_expire_centisecs 2>/dev/null
 
-# 6. Sector 3: Schedutil Governor Curve (0.5ms touch burst / 20ms hold)
-for gov in /sys/devices/system/cpu/cpufreq/schedutil /sys/devices/system/cpu/cpu*/cpufreq/schedutil; do
-    if [ -d "$gov" ]; then
-        [ -f "$gov/up_rate_limit_us" ] && echo "500" > "$gov/up_rate_limit_us" 2>/dev/null
-        [ -f "$gov/down_rate_limit_us" ] && echo "20000" > "$gov/down_rate_limit_us" 2>/dev/null
+# 6. Sector 3: CPUSET Core Affinity & Isolation (MediaTek Helio G85 MT6769V)
+# Confine background daemons exclusively to Cortex-A55 LITTLE cores (0-3).
+# Keeps Cortex-A75 Big cores 6-7 dormant when screen is off, and 100% available for UI.
+if [ -d "/dev/cpuset/background" ]; then
+    echo "0-3" > /dev/cpuset/background/cpus 2>/dev/null
+fi
+if [ -d "/dev/cpuset/system-background" ]; then
+    echo "0-3" > /dev/cpuset/system-background/cpus 2>/dev/null
+fi
+if [ -d "/dev/cpuset/restricted" ]; then
+    echo "0-3" > /dev/cpuset/restricted/cpus 2>/dev/null
+fi
+if [ -d "/dev/cpuset/dex2oat" ]; then
+    echo "0-5" > /dev/cpuset/dex2oat/cpus 2>/dev/null
+fi
+
+# 7. Sector 4: EAS Schedtune Energy Bias
+for stune in background system-background; do
+    if [ -d "/dev/stune/$stune" ]; then
+        echo "0" > "/dev/stune/$stune/schedtune.boost" 2>/dev/null
+        echo "0" > "/dev/stune/$stune/schedtune.prefer_idle" 2>/dev/null
     fi
 done
 
-# 7. Sector 4: Safe, balanced Doze profile
-cmd deviceidle step 2>/dev/null
+# 8. Sector 5: Schedutil Governor Curve (Instant Touch Ramp / Fast Idle Downclock)
+if [ -d "/sys/devices/system/cpu/cpufreq/policy6/schedutil" ]; then
+    echo "500" > /sys/devices/system/cpu/cpufreq/policy6/schedutil/up_rate_limit_us 2>/dev/null
+    echo "10000" > /sys/devices/system/cpu/cpufreq/policy6/schedutil/down_rate_limit_us 2>/dev/null
+fi
+if [ -d "/sys/devices/system/cpu/cpufreq/policy0/schedutil" ]; then
+    echo "1000" > /sys/devices/system/cpu/cpufreq/policy0/schedutil/up_rate_limit_us 2>/dev/null
+    echo "15000" > /sys/devices/system/cpu/cpufreq/policy0/schedutil/down_rate_limit_us 2>/dev/null
+fi
+for gov in /sys/devices/system/cpu/cpufreq/schedutil /sys/devices/system/cpu/cpu*/cpufreq/schedutil; do
+    if [ -d "$gov" ]; then
+        [ -f "$gov/up_rate_limit_us" ] && echo "500" > "$gov/up_rate_limit_us" 2>/dev/null
+        [ -f "$gov/down_rate_limit_us" ] && echo "15000" > "$gov/down_rate_limit_us" 2>/dev/null
+    fi
+done
+
+# 9. Sector 6: Android Quick Doze (Deep Sleep in 15s after Screen-Off)
+DOZE_PARAMS="light_after_inactive_to=15000,light_pre_idle_to=30000,light_idle_to=60000,light_idle_factor=2.0,light_max_idle_to=900000,locating_to=0,location_accuracy=20.0,motion_inactive_to=30000,idle_after_inactive_to=60000,idle_pending_to=60000,max_idle_pending_to=120000,idle_pending_factor=2.0,idle_to=300000,max_idle_to=21600000,idle_factor=2.0,min_time_to_alarm=3600000"
+settings put global device_idle_constants "$DOZE_PARAMS" 2>/dev/null
+
+# 10. Sector 7: Hardware Battery Protection (80% Lifespan Protection Cap)
+CURRENT_PROTECT=$(settings get global protect_battery 2>/dev/null)
+if [ -z "$CURRENT_PROTECT" ] || [ "$CURRENT_PROTECT" = "null" ]; then
+    settings put global protect_battery 1 2>/dev/null
+    settings put global protect_battery_mode 2 2>/dev/null
+fi
+
+# 11. Sector 8: UI Animation Fluidity (0.75x Scale for Responsive 60Hz/90Hz)
+settings put global window_animation_scale 0.75 2>/dev/null
+settings put global transition_animation_scale 0.75 2>/dev/null
+settings put global animator_duration_scale 0.75 2>/dev/null
+
+# 12. Sector 9: Silencing Heavy Telemetry & Log Loops
+pm disable-user --user 0 com.samsung.android.securitylogagent 2>/dev/null
+cmd wifi set-verbose-logging disabled 2>/dev/null
 
 exit 0
+

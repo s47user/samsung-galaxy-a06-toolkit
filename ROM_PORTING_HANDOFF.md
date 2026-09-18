@@ -1,12 +1,12 @@
 # Samsung Galaxy A06 (`SM-A065F`) Stock-Based Custom ROM - Project Handoff
 
-**Project State**: V1.4 Production Package Assembled & Verified  
+**Project State**: V1.5 Production Package Assembled & Verified  
 **Device**: Samsung Galaxy A06 (`SM-A065F` / `SM-A065M`)  
 **Chipset**: MediaTek Helio G85 (`MT6769V/CZ`), ARM Mali-G52 2EEMC2  
 **Base Firmware**: `A065FXXS4AYE2` (Android 14 / One UI Core 6.1)  
 **Kernel**: Custom `4.19.191` (KernelSU-Next v3.3.0 + SuSFS v1.5.5 + DEFEX removed)  
-**Optimization Engine**: Sectors 1 (eMMC I/O), 2 (2.2GB in-RAM zRAM), 3 (Schedutil 0.5ms Touch), 4 (10-min Doze)  
-**Feature Suite**: One UI Experience Suite v3.0 (Screen Recorder, Network Speed, Call Recording, Shutter Switch, Dolby Atmos)  
+**Optimization Engine**: Realist Silicon Engine (CPUSET Little-core gating, eMMC writeback batching, 15s Quick Doze, 80% Battery Protection, ART AOT pre-compiler)  
+**Feature Suite**: One UI Experience Suite v3.1 (Screen Recorder, Network Speed, Call Recording, Shutter Switch, Dolby Atmos, QS Tiles)  
 **Verification Layer**: AVB 2.0 Disabled (`vbmeta_disabled.img`, flags `0x02`)  
 
 ---
