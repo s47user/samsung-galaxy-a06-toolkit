@@ -187,6 +187,22 @@ A production-grade, debloated custom ROM and companion systemless suite for the 
 
 ---
 
+### 7. Custom Recovery Engines (TWRP 3.7.1 & OrangeFox R12.0)
+Fully operational, touch-fixed custom recovery environments for Galaxy A06 (`SM-A065F`):
+- **Touch Release Protocol Patch**: Patched `libminuitwrp.so` jump table (`ABS_MT_TOUCH_MAJOR=0` and `ABS_MT_PRESSURE=0`) to prevent legacy Protocol A fallbacks from clobbering Protocol B `TOUCH_RELEASE` events. All buttons, menus, and brightness sliders respond smoothly.
+- **Hardware SAR Grip Sensor Isolation**: Automatically unbinds Semtech SX933x (`5-0028`) from the I2C bus on boot via `clean_inputs.sh` to eliminate input event spam.
+- **OrangeFox Keystore / Decryption Bypass**: Patched recovery binary `0x291ff4` (`mov w0, #0; ret`), bypassing the Android Keystore2 IPC retry loop and allowing instant boot straight into the OrangeFox UI.
+- **Strict Bootloader Geometry Compliance**: Ramdisk strictly maintained $\le 31,597,580$ bytes to prevent LittleKernel DTB / APMCU debug table corruption.
+
+See [docs/custom_recovery_guide.md](docs/custom_recovery_guide.md) for full architecture specifications, disassembly offsets, and flashing commands.
+
+| Engine | Package | Flash Slot | Status |
+| :--- | :--- | :--- | :--- |
+| **OrangeFox R12.0** | `OrangeFox_R12.0_A06_TouchFixed.tar.md5` | `AP` (Odin) / `recovery` (`dd`) | **Verified Working** |
+| **TWRP 3.7.1** | `TWRP_3.7.1_A06_TouchFixed.tar.md5` | `AP` (Odin) / `recovery` (`dd`) | **Verified Working** |
+
+---
+
 ## References & Credits
 
 Special thanks and sincere credit to the developers, projects, and communities that made this toolkit and custom kernel possible:
