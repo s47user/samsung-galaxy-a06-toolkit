@@ -87,7 +87,43 @@ With this patch, OrangeFox immediately logs `I:Unable to decrypt metadata encryp
 
 ---
 
-## 5. Pre-Built Flashable Packages
+## 5. Hardware Backlight Scale Alignment (0–255)
+
+### Problem Analysis
+In OrangeFox Recovery, adjusting the brightness slider appeared to do nothing; the screen remained permanently stuck at 100% full illumination.
+
+### Root Cause
+1. Galaxy A06 (`SM-A065F`) uses the MediaTek LED driver `/sys/class/leds/lcd-backlight/brightness` with a hardware ceiling of `max_brightness = 255`.
+2. The donor recovery binary had hardcoded `tw_brightness_max = 4095` at offset `0xf7080` (`mov w1, #0xfff`), and `vars.xml` set default `tw_brightness_max = 2047`.
+3. When the user adjusted the slider from 10% to 100%, the UI calculated brightness values from `409` up to `4095`.
+4. Writing any value $\ge 255$ to `/sys/class/leds/lcd-backlight/brightness` was clamped by the Linux kernel LED subsystem to `255`, locking the display at full brightness across the entire slider range.
+
+### Binary & Resource Patch
+- **`system/bin/recovery` (Offset `0xf7080`)**:
+  - Replaced `5281ffe1` (`mov w1, #0xfff` / 4095) with `52801fe1` (`mov w1, #0xff` / 255).
+- **`twres/resources/vars.xml` & `twres/ui.xml`**:
+  - Updated `tw_brightness_max` from `2047` to `255`.
+  - Configured comfortable default brightness to `120` (~47%).
+- **`clean_inputs.sh`**:
+  - Sets initial boot brightness to `120` (`echo 120 > /sys/class/leds/lcd-backlight/brightness`).
+
+---
+
+## 6. Timezone UTC Synchronization & Vibrator Deadlock Elimination
+
+### Timezone Real-Time Correction (1-Hour Ahead Fix)
+- **Problem**: Recovery displayed the clock 1 hour ahead of true local/UTC time (e.g. `3:16` instead of `2:16`).
+- **Root Cause**: `vars.xml` initialized `tw_time_zone="GMT0;BST,M3.5.0,M10.5.0"`. In bionic libc, this rule activated British Summer Time (BST = UTC+1) between March and October.
+- **Fix**: Changed `tw_time_zone` and `tw_time_zone_guisel` to pure `UTC0`, and updated `prop.default` (`persist.sys.timezone=UTC`, `ro.timezone=UTC`). Clock matches true real time accurately.
+
+### Vibrator Deadlock Elimination (UI Freeze Fix)
+- **Problem**: Toggling the vibration slider in Settings froze the recovery interface completely.
+- **Root Cause**: The Galaxy A06 uses an `odm:vibrator@0` hardware motor managed by Samsung's proprietary HAL. In `libminuitwrp.so`, `_Z7vibratei` invoked AIDL `AServiceManager_getService("IVibrator/default")`. Because the AIDL vibrator HAL service is absent in recovery, the Binder IPC call blocked the main UI thread in an unrecoverable kernel sleep.
+- **Binary Patch**: In `libminuitwrp.so` at offset `0x24d64` (`_Z7vibratei`), replaced the function prologue with `mov w0, #0; ret` (`00 00 80 52 c0 03 5f d6`). Any vibration call immediately returns 0 without calling Binder, eliminating all freeze risks. `tw_disable_haptics=1` is also set in `vars.xml`.
+
+---
+
+## 7. Pre-Built Flashable Packages
 
 | Package | Size | Target | Flash Slot | Description |
 | :--- | :--- | :--- | :--- | :--- |
