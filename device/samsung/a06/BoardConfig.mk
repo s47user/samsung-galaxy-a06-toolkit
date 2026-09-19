@@ -1,0 +1,113 @@
+#
+# BoardConfig.mk - Samsung Galaxy A06 (SM-A065F)
+# Architecture: MediaTek Helio G85 (MT6769V / MT6768 platform)
+#
+
+DEVICE_PATH := device/samsung/a06
+
+# Architecture
+TARGET_ARCH := arm64
+TARGET_ARCH_VARIANT := armv8-a
+TARGET_CPU_ABI := arm64-v8a
+TARGET_CPU_ABI2 :=
+TARGET_CPU_VARIANT := generic
+
+TARGET_2ND_ARCH := arm
+TARGET_2ND_ARCH_VARIANT := armv7-a-neon
+TARGET_2ND_CPU_ABI := armeabi-v7a
+TARGET_2ND_CPU_ABI2 := armeabi
+TARGET_2ND_CPU_VARIANT := generic
+
+TARGET_BOARD_PLATFORM := mt6768
+
+# Assert / Identification
+TARGET_OTA_ASSERT_DEVICE := a06,a06xx,SM-A065F,SM-A065M
+
+# Boot & Recovery Kernel Configuration
+BOARD_KERNEL_BASE := 0x40000000
+BOARD_KERNEL_PAGESIZE := 2048
+BOARD_KERNEL_OFFSET := 0x00080000
+BOARD_RAMDISK_OFFSET := 0x07c80000
+BOARD_TAGS_OFFSET := 0x07880000
+BOARD_DTB_OFFSET := 0x07880000
+BOARD_BOOT_HEADER_VERSION := 2
+
+BOARD_KERNEL_CMDLINE := bootopt=64S3,32N2,64N2 loop.max_part=7
+
+BOARD_MKBOOTIMG_ARGS += --header_version $(BOARD_BOOT_HEADER_VERSION)
+BOARD_MKBOOTIMG_ARGS += --ramdisk_offset $(BOARD_RAMDISK_OFFSET)
+BOARD_MKBOOTIMG_ARGS += --tags_offset $(BOARD_TAGS_OFFSET)
+BOARD_MKBOOTIMG_ARGS += --dtb_offset $(BOARD_DTB_OFFSET)
+
+# Prebuilt Kernel & DTB
+BOARD_INCLUDE_DTB_IN_BOOTIMG := true
+BOARD_PREBUILT_DTBIMAGE_DIR := $(DEVICE_PATH)/prebuilt
+TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/prebuilt/kernel
+TARGET_PREBUILT_DTB := $(DEVICE_PATH)/prebuilt/dtb.img
+
+# Physical Partition Sizes (from a06.pit)
+BOARD_RECOVERYIMAGE_PARTITION_SIZE := 89128960
+BOARD_BOOTIMAGE_PARTITION_SIZE := 67108864
+BOARD_CACHEIMAGE_PARTITION_SIZE := 209715200
+BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_SYSTEMIMAGE_PARTITION_TYPE := erofs
+BOARD_USERDATAIMAGE_FILE_SYSTEM_TYPE := f2fs
+BOARD_HAS_LARGE_FILESYSTEM := true
+
+# Android Dynamic Partitions (inside super.img)
+BOARD_SUPER_PARTITION_SIZE := 9646899200
+BOARD_SUPER_PARTITION_GROUPS := main
+BOARD_MAIN_SIZE := 9642704896
+BOARD_MAIN_PARTITION_LIST := system vendor product odm system_ext
+
+# Filesystem & Recovery Mounts
+TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/recovery/root/system/etc/recovery.fstab
+RECOVERY_SDCARD_ON_DATA := true
+
+# Display / Touch / GUI
+TW_THEME := portrait_hdpi
+DEVICE_RESOLUTION := 720x1600
+TW_SCREEN_BLANK_ON_BOOT := true
+TW_BRIGHTNESS_PATH := "/sys/class/leds/lcd-backlight/brightness"
+TW_MAX_BRIGHTNESS := 2047
+TW_DEFAULT_BRIGHTNESS := 1024
+TW_Y_OFFSET := 80
+TW_H_OFFSET := -80
+TW_SUPPORT_INPUT_1_2_HACKS := true
+
+# Samsung Bootloader Specifics
+TW_NO_REBOOT_BOOTLOADER := true
+TW_HAS_DOWNLOAD_MODE := true
+
+# Encryption / Keystore Handling
+# Stock Android 14 Samsung TEE Keystore cannot be decrypted on-the-fly
+TW_INCLUDE_CRYPTO := false
+TW_INCLUDE_FBE_METADATA_DECRYPT := true
+
+# Storage & Tools
+TW_USE_TOOLBOX := true
+TW_EXCLUDE_DEFAULT_USB_INIT := true
+TW_HAS_MTP := true
+TW_INCLUDE_NTFS_3G := true
+TW_INCLUDE_RESETPROP := true
+TW_INCLUDE_REPACKTOOLS := true
+TW_INCLUDE_LIBRESETPROP := true
+TARGET_USES_MKE2FS := true
+TW_EXCLUDE_SUPERSU := true
+TW_CUSTOM_CPU_TEMP_PATH := "/sys/class/thermal/thermal_zone0/temp"
+
+# OrangeFox Recovery Project (OFRP) Specific Configuration
+FOX_USE_TWRP_RECOVERY_IMAGE_BUILDER := 1
+OF_SCREEN_H := 1600
+OF_STATUS_H := 80
+OF_STATUS_INDENT_LEFT := 48
+OF_STATUS_INDENT_RIGHT := 48
+OF_USE_GREEN_LED := 0
+OF_FLASHLIGHT_ENABLE := 1
+OF_FL_PATH1 := "/sys/class/camera/flash/rear_flash"
+OF_MAINTAINER := "s47user"
+OF_TARGET_DEVICES := a06,a06xx,SM-A065F,SM-A065M
+OF_PATCH_AVB20 := 1
+OF_SUPPORT_ALL_BLOCK_OTA_UPDATES := 1
+OF_QUICK_BACKUP_LIST := "/boot;/data;/efs;/sec_efs;/nvram;/nvdata;/protect1;/protect2;"
+OF_DISABLE_MIUI_SPECIFIC_FEATURES := 1

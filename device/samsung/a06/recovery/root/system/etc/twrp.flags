@@ -1,0 +1,52 @@
+# TWRP extended flags for Samsung Galaxy A06 (SM-A065F)
+
+# Dynamic Partitions (inside super)
+/system_image   emmc    /dev/block/mapper/system        flags=backup=1;flashimg=1;display="System Image"
+/vendor_image   emmc    /dev/block/mapper/vendor        flags=backup=1;flashimg=1;display="Vendor Image"
+/product_image  emmc    /dev/block/mapper/product       flags=backup=1;flashimg=1;display="Product Image"
+/odm_image      emmc    /dev/block/mapper/odm           flags=backup=1;flashimg=1;display="ODM Image"
+/system_ext_img emmc    /dev/block/mapper/system_ext    flags=backup=1;flashimg=1;display="System_EXT Image"
+
+# Core Boot & Recovery
+/boot           emmc    /dev/block/by-name/boot         flags=backup=1;flashimg=1;display="Boot"
+/recovery       emmc    /dev/block/by-name/recovery     flags=backup=1;flashimg=1;display="Recovery"
+/dtbo           emmc    /dev/block/by-name/dtbo         flags=backup=1;flashimg=1;display="DTBO"
+/cache          ext4    /dev/block/by-name/cache        flags=backup=1;display="Cache"
+/metadata       ext4    /dev/block/by-name/md_udc       flags=backup=1;display="Metadata"
+/super          emmc    /dev/block/by-name/super        flags=backup=1;flashimg=1;display="Super Container"
+
+# Samsung Specific
+/prism          ext4    /dev/block/by-name/prism        flags=backup=0;display="Prism"
+/prism_image    emmc    /dev/block/by-name/prism        flags=backup=1;flashimg=1;display="Prism Image"
+/optics         ext4    /dev/block/by-name/optics       flags=backup=0;display="Optics"
+/optics_image   emmc    /dev/block/by-name/optics       flags=backup=1;flashimg=1;display="Optics Image"
+/up_param       emmc    /dev/block/by-name/up_param     flags=backup=1;flashimg=1;display="Boot Logo (up_param)"
+/param          emmc    /dev/block/by-name/param        flags=backup=1;display="Param"
+
+# AVB 2.0 / VBMeta
+/vbmeta         emmc    /dev/block/by-name/vbmeta        flags=backup=1;flashimg=1;display="VBMeta"
+/vbmeta_system  emmc    /dev/block/by-name/vbmeta_system flags=backup=1;flashimg=1;display="VBMeta System"
+/vbmeta_vendor  emmc    /dev/block/by-name/vbmeta_vendor flags=backup=1;flashimg=1;display="VBMeta Vendor"
+
+# MediaTek Radio / IMEI / NVRAM (Vital)
+/nvram          emmc    /dev/block/by-name/nvram        flags=backup=1;display="NVRAM";subpartitionof=/nvdata
+/nvdata         ext4    /dev/block/by-name/nvdata       flags=backup=1;display="NVDATA"
+/nvcfg          ext4    /dev/block/by-name/nvcfg        flags=backup=1;display="NVCFG";subpartitionof=/nvdata
+/protect1       ext4    /dev/block/by-name/protect1     flags=backup=1;display="Protect1";subpartitionof=/nvdata
+/protect2       ext4    /dev/block/by-name/protect2     flags=backup=1;display="Protect2";subpartitionof=/nvdata
+/proinfo        emmc    /dev/block/by-name/proinfo      flags=backup=1;display="Proinfo";subpartitionof=/nvdata
+/md1img         emmc    /dev/block/by-name/md1img       flags=backup=1;flashimg=1;display="Modem (Baseband)"
+/spmfw          emmc    /dev/block/by-name/spmfw        flags=backup=1;display="SPMFW"
+/scp1           emmc    /dev/block/by-name/scp1         flags=backup=1;display="SCP1"
+/sspm_1         emmc    /dev/block/by-name/sspm_1       flags=backup=1;display="SSPM1"
+/tzar           emmc    /dev/block/by-name/tzar         flags=backup=1;display="TZAR"
+/gz1            emmc    /dev/block/by-name/gz1          flags=backup=1;display="GZ1"
+/lk             emmc    /dev/block/by-name/lk           flags=backup=1;flashimg=1;display="LK (Bootloader)"
+
+# Samsung EFS & Encryption Keys
+/efs            ext4    /dev/block/by-name/sec_efs      flags=backup=1;display="EFS"
+/sec_efs        ext4    /dev/block/by-name/sec_efs      flags=backup=1;display="Sec EFS";subpartitionof=/efs
+
+# External Storage
+/external_sd    vfat    /dev/block/mmcblk1p1    /dev/block/mmcblk1      flags=display="MicroSD Card";storage;wipeingui;removable
+/usb_otg        vfat    /dev/block/sda1         /dev/block/sda          flags=display="USB OTG";storage;wipeingui;removable

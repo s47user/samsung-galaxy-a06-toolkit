@@ -1,0 +1,23 @@
+# Android fstab file for Samsung Galaxy A06 (SM-A065F)
+# Dynamic partitions inside super.img
+system          /system         erofs   ro      wait,logical,first_stage_mount
+system_ext      /system_ext     erofs   ro      wait,logical,first_stage_mount
+vendor          /vendor         erofs   ro      wait,logical,first_stage_mount
+product         /product        erofs   ro      wait,logical,first_stage_mount
+odm             /odm            erofs   ro      wait,logical,first_stage_mount
+
+# Physical Partitions
+/dev/block/by-name/boot         /boot           emmc    defaults    recoveryonly
+/dev/block/by-name/recovery     /recovery       emmc    defaults    recoveryonly
+/dev/block/by-name/userdata     /data           f2fs    noatime,nosuid,nodev,discard,usrquota,grpquota,fsync_mode=nobarrier,reserve_root=32768,resgid=5678    wait,length=-16384,fscompress
+/dev/block/by-name/cache        /cache          ext4    defaults    recoveryonly
+/dev/block/by-name/sec_efs      /efs            ext4    defaults    recoveryonly
+/dev/block/by-name/carrier      /carrier        ext4    defaults    recoveryonly
+/dev/block/by-name/hidden       /preload        ext4    defaults    recoveryonly
+/dev/block/by-name/misc         /misc           emmc    defaults    recoveryonly
+/dev/block/by-name/md_udc       /metadata       ext4    noatime,nosuid,nodev,noauto_da_alloc,discard,journal_checksum,data=ordered,errors=panic,sync    wait,first_stage_mount,formattable,check
+/dev/block/by-name/dtbo         /dtbo           emmc    defaults    recoveryonly
+/dev/block/by-name/prism        /prism          ext4    defaults    recoveryonly
+/dev/block/by-name/optics       /optics         ext4    defaults    recoveryonly
+/dev/block/by-name/keydata      /keydata        ext4    defaults    recoveryonly
+/dev/block/by-name/keyrefuge    /keyrefuge      f2fs    defaults    recoveryonly

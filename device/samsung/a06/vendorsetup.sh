@@ -1,0 +1,4 @@
+add_lunch_combo omni_a06-userdebug
+add_lunch_combo omni_a06-eng
+add_lunch_combo twrp_a06-userdebug
+add_lunch_combo twrp_a06-eng
